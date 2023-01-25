@@ -3,8 +3,10 @@ title: "example"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{example}
-  %\VignetteEngine{knitr::rmarkdown}
   %\VignetteEncoding{UTF-8}
+  %\VignetteEngine{knitr::rmarkdown}
+editor_options: 
+  chunk_output_type: console
 ---
 
 ```{r, include = FALSE}
@@ -16,4 +18,23 @@ knitr::opts_chunk$set(
 
 ```{r setup}
 library(imprecise101)
+```
+
+## Examples 
+
+We draw a sequence of marbles whose colours are (in order): blue, green, blue, blue, green, red. What conclusions can you reach about the probability of drawing a red marble on a future trial? 
+
+If $\Omega = \{R, B, G, O\}$, then $n = (1, 3, 2, 0)$ and $L(\theta|n) \propto \theta_R \theta_B^3 \theta_G^2$. 
+
+### 4.1. Probabilities of Future Outcomes 
+
+The simplest way of stating our conclusion is to report the posterior upper and lower probabilities of obtaining red on the next trial. 
+
+Using $s=2$, $\overline{P}(R|n)=0.375$ and $\underline{P}(R|n)=0.125$
+For $s=1$, $\overline{P}(R|n)=0.286$ and $\underline{P}(R|n)=0.143$. 
+
+```{r}
+op <- idm(nj=1, s=2, N=6)
+op$p.lower 
+op$p.upper
 ```
