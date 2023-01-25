@@ -44,6 +44,10 @@ idm <- function(nj, s=1, N, tj=NA){
 #' @title Find HPD
 #' @description Find the highest posterior density interval
 #' @param maxiter maximum number of iterations
+#' @param tolerance tolerance level
+#' @param alpha shape1 parameter of beta distribution
+#' @param beta shape2 parameter of beta distribution
+#' @param p credible level
 #' @example
 #' x <- hpd(alpha=3, beta=5, p=0.95) # c(0.0031, 0.6587) when s=2
 #' # round(x,4); x*(1-x)^5
@@ -58,7 +62,7 @@ idm <- function(nj, s=1, N, tj=NA){
 #' x <- hpd(alpha=2, beta=5, p=0.5) # c(0.0761, 0.2958) when s=1
 #' # round(x,4); x*(1-x)^5
 #' @export
-hpd <- function(alpha=3, beta=5, p=0.95, runs=1e1, tolerance=1e-4, maxiter=1e2){
+hpd <- function(alpha=3, beta=5, p=0.95, tolerance=1e-4, maxiter=1e2){
 
   # objective function 1
   fn1 <- function(a, b){
@@ -71,8 +75,8 @@ hpd <- function(alpha=3, beta=5, p=0.95, runs=1e1, tolerance=1e-4, maxiter=1e2){
   # objective function 2
   fn2 <- function(b, a){ # let fix a
     # fn0 <- function(theta) 105*theta^2*(1-theta)^4
-    fn0 <- function(theta) dbeta(theta, alpha, beta) # 105*theta^2*(1-theta)^4
-    dif <- abs(integrate(f=fn0, lower=a, upper=b)$value - p)
+    fn0 <- function(theta) stats::dbeta(theta, alpha, beta) # 105*theta^2*(1-theta)^4
+    dif <- abs(stats::integrate(f=fn0, lower=a, upper=b)$value - p)
     return(dif)
   }
 
@@ -85,11 +89,11 @@ hpd <- function(alpha=3, beta=5, p=0.95, runs=1e1, tolerance=1e-4, maxiter=1e2){
   while( dif > tolerance){
 
     # for fixed b, searching for a
-    op1 <- optimize(f=fn1, b=b, lower=0, upper=qbeta(1-p, alpha, beta))
+    op1 <- stats::optimize(f=fn1, b=b, lower=0, upper=stats::qbeta(1-p, alpha, beta))
     a <- op1$minimum
 
     # for fixed a, searching for b
-    op2 <- optimize(f=fn2, a=a, lower=qbeta(p, alpha, beta), upper=1)
+    op2 <- stats::optimize(f=fn2, a=a, lower=stats::qbeta(p, alpha, beta), upper=1)
     b <- op2$minimum
 
     dif <- fn1(a=a, b=b)
@@ -105,25 +109,10 @@ hpd <- function(alpha=3, beta=5, p=0.95, runs=1e1, tolerance=1e-4, maxiter=1e2){
 
 
 
-#' @rdname idm
 #
 # Eqn 2. P(D(l)|n) = \int_a^b 105 t^2 (1-t)^4 dt = 0.95
 # computing the 95% credible interval (highest posterior density interval)
 #
 # library(pscl)
 # x <- betaHPD(alpha=3, beta=5, p=0.95, plot=TRUE)
-
-alpha <- 3
-beta <- 5
-p <- 0.95
-
-fn2 <- function(x0, alpha, beta, p) {
-  y0 <- dbeta(x0, alpha, beta)
-  p0 <- pbeta(x0, alpha, beta)
-  x1 <- qbeta(p0 + p, alpha, beta)
-  y1 <- dbeta(x1, alpha, beta)
-  v <- abs(y0 - y1)
-  return(v)
-}
-op2 <- optimize(f = fn2, alpha=alpha, beta=beta, p=p, interval = c(0, qbeta(1 - p, alpha, beta)))
-c(a=op2$minimum, b=qbeta(pbeta(op2$minimum, a, b) + p, a, b))
+#
