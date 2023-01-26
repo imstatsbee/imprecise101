@@ -5,22 +5,29 @@
 #' @param nj number of observations in the j-th category
 #' @param s learning parameter
 #' @param N a total number of drawings
+#' @param k number of elements in Omega
 #' @param tj proability
+#' @param cA the number of elements in A
 #' @examples
-#' idm(nj=1, N=6, s=2)
-#' idm(nj=1, N=6, s=1)
+#' idm(nj=1, N=6, s=2, k=4)
+#' idm(nj=1, N=6, s=1, k=4)
 #' @export
-idm <- function(nj, s=1, N, tj=NA){
-  stopifnot(s >= 1)
+idm <- function(nj, s=1, N, tj=NA_real_, k, cA=1){
+  stopifnot(s >= 0)
+  stopifnot(nj >= 0)
+  stopifnot(N >= 0)
 
-  # section 2.3
-  ## point probability p.10, 0 <= tj <= 1
-  p <- tj.star <- (nj+s*tj)/(N+s)
+  if(is.na(tj)) tj <- 0.5
 
-  ## upper bound (limiting as tj -> 1)
+  # sec2.3/
+  # p <- tj.star <- (nj+s*tj)/(N+s)
+  # sec2.4/
+  p <- (nj + s/k*cA)/(N+s)
+
+  ## sec2.3/upper bound (limiting as tj -> 1)
   p.u <- (nj+s)/(N+s)
 
-  ## lower bound (limiting as tj -> 0)
+  ## sec2.3/lower bound (limiting as tj -> 0)
   p.l <- (nj)/(N+s)
 
   p.delta <- s/(N+s)
@@ -38,6 +45,45 @@ idm <- function(nj, s=1, N, tj=NA){
   robj <- list(p.lower=p.l, p.upper=p.u, v.lower=v.l, v.upper=v.u, s.lower=sqrt(v.l), s.upper=sqrt(v.u), p=p, p.delta=p.delta)
   return(robj)
 }
+
+#' @rdname betabinom
+#' @title Beta-Binomial Distribution
+#' @description Density function of beta-binomial distribution
+#' @param x the number of occurrence of A in N previous trials
+#' @param N a total number of previous trials
+#' @param M a number of future trials
+#' @param i the number of occurrences of A in M future trials
+#' @param tA the prior probability of A under the Dirichlet prior
+#' @param s learning parameter
+#' @param y the number of occurrences of A in M future trials
+#' @export
+dbetabinom <- function(i, M, x, s, N, tA){
+  # stopifnot(0 >= i & i <= M)
+  # stopifnot(0 >= tA & tA <= 1)
+  alpha <- s*tA
+  beta <- s-s*tA
+  pi <- choose(n=M,k=i)*beta(alpha+x+i, beta+N-x+M-i)/beta(alpha+x, beta+N-x)
+  return(pi)
+}
+
+#' @rdname betabinom
+#' @example
+#' pbetabinom(M=6, x=1, s=1, N=6, y=0)
+pbetabinom <- function(M, x, s, N, y){
+  p.l <- 0
+  for(i in 0:y){
+    p0 <- dbetabinom(i=i, M=M, x=x, s=s, N=N, tA=1) # minimized by limiting tA to 1
+    p.l <- p.l + p0
+  }
+  p.u <- 0
+  for(i in 0:y){
+    p0 <- dbetabinom(i=i, M=M, x=x, s=s, N=N, tA=0) # maximized by limiting tA to 0
+    p.u <- p.u + p0
+  }
+  robj <- list(p.l=p.l, p.u=p.u)
+  return(robj)
+}
+
 
 
 #' @rdname idm

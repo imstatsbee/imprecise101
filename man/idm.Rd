@@ -5,7 +5,7 @@
 \alias{hpd}
 \title{imprecise Dirichlet model}
 \usage{
-idm(nj, s = 1, N, tj = NA)
+idm(nj, s = 1, N, tj = NA_real_, k, cA = 1)
 
 hpd(alpha = 3, beta = 5, p = 0.95, tolerance = 1e-04, maxiter = 100)
 }
@@ -17,6 +17,10 @@ hpd(alpha = 3, beta = 5, p = 0.95, tolerance = 1e-04, maxiter = 100)
 \item{N}{a total number of drawings}
 
 \item{tj}{proability}
+
+\item{k}{number of elements in Omega}
+
+\item{cA}{the number of elements in A}
 
 \item{alpha}{shape1 parameter of beta distribution}
 
@@ -34,8 +38,8 @@ lower and upper posterior probabilities
 Find the highest posterior density interval
 }
 \examples{
-idm(nj=1, N=6, s=2)
-idm(nj=1, N=6, s=1)
+idm(nj=1, N=6, s=2, k=4)
+idm(nj=1, N=6, s=1, k=4)
 x <- hpd(alpha=3, beta=5, p=0.95) # c(0.0031, 0.6587) when s=2
 # round(x,4); x*(1-x)^5
 x <- hpd(alpha=2, beta=5, p=0.95) # c(0.0076, 0.5834) when s=1
