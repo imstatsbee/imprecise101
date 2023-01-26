@@ -17,6 +17,7 @@ knitr::opts_chunk$set(
 ```
 
 ```{r setup}
+rm(list=ls())
 library(imprecise101)
 ```
 
@@ -71,4 +72,47 @@ idm(nj=1, s=3/2, N=6, k=3, cA=2)$p
 idm(nj=1, s=3, N=6, k=3, cA=2)$p
 
 ```
+
+Inferences can also be made about the number of red marbles that will be drawn in $M$ future trials. 
+
+```{r}
+mat <- rbind(
+  unlist(pbetabinom(M=6, x=1, s=1, N=6, y=0)),
+  unlist(pbetabinom(M=6, x=1, s=1, N=6, y=1)),
+  unlist(pbetabinom(M=6, x=1, s=1, N=6, y=2)),
+  unlist(pbetabinom(M=6, x=1, s=1, N=6, y=3)),
+  unlist(pbetabinom(M=6, x=1, s=1, N=6, y=4)),
+  unlist(pbetabinom(M=6, x=1, s=1, N=6, y=5)),
+  unlist(pbetabinom(M=6, x=1, s=1, N=6, y=6))
+)
+rownames(mat) <- c("y=0", "y=1", "y=2", "y=3", "y=4", "y=5", "y=6")
+round(mat, 3)
+```
+
+### 4.2 Means and Standard Deviations for $\theta_R$
+
+Taking $s=2$, $\overline{E}(\theta_R|n) = 0.375$, $\underline{E}(\theta_R|n)=0.125$, $\overline{\sigma}(\theta_R|n)=0.188$, and $\underline{\sigma}(\theta_R|n)=0.110$. 
+
+Taking $s=1$, $\overline{E}(\theta_R|n) = 0.286$, $\underline{E}(\theta_R|n)=0.143$, $\overline{\sigma}(\theta_R|n)=0.164$, and $\underline{\sigma}(\theta_R|n)=0.124$. 
+
+```{r}
+op <- idm(nj=1, s=2, N=6, k=4)
+round(c(op$p.upper, op$p.lower, op$s.upper, op$s.lower),3)
+
+op <- idm(nj=1, s=1, N=6, k=4)
+round(c(op$p.upper, op$p.lower, op$s.upper, op$s.lower),3)
+```
+
+### 4.3 Credible Intervals for $\theta_R$
+
+```{r}
+round(hpd(alpha=3, beta=5, p=0.95),4) # s=2
+round(hpd(alpha=3, beta=5, p=0.90),4) # s=2
+round(hpd(alpha=3, beta=5, p=0.50),4) # s=2
+round(hpd(alpha=2, beta=5, p=0.95),4) # s=1
+round(hpd(alpha=2, beta=5, p=0.90),4) # s=1
+round(hpd(alpha=2, beta=5, p=0.50),4) # s=1
+```
+
+### 4.4 Testing Hypotheses about $\theta_R$
 

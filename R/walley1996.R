@@ -56,6 +56,8 @@ idm <- function(nj, s=1, N, tj=NA_real_, k, cA=1){
 #' @param tA the prior probability of A under the Dirichlet prior
 #' @param s learning parameter
 #' @param y the number of occurrences of A in M future trials
+#' @example
+#' pbetabinom(M=6, x=1, s=1, N=6, y=0)
 #' @export
 dbetabinom <- function(i, M, x, s, N, tA){
   # stopifnot(0 >= i & i <= M)
@@ -67,8 +69,7 @@ dbetabinom <- function(i, M, x, s, N, tA){
 }
 
 #' @rdname betabinom
-#' @example
-#' pbetabinom(M=6, x=1, s=1, N=6, y=0)
+#' @export
 pbetabinom <- function(M, x, s, N, y){
   p.l <- 0
   for(i in 0:y){
@@ -94,6 +95,7 @@ pbetabinom <- function(M, x, s, N, y){
 #' @param alpha shape1 parameter of beta distribution
 #' @param beta shape2 parameter of beta distribution
 #' @param p credible level
+#' @param verbose silence
 #' @examples
 #' x <- hpd(alpha=3, beta=5, p=0.95) # c(0.0031, 0.6587) when s=2
 #' # round(x,4); x*(1-x)^5
@@ -108,7 +110,7 @@ pbetabinom <- function(M, x, s, N, y){
 #' x <- hpd(alpha=2, beta=5, p=0.5) # c(0.0761, 0.2958) when s=1
 #' # round(x,4); x*(1-x)^5
 #' @export
-hpd <- function(alpha=3, beta=5, p=0.95, tolerance=1e-4, maxiter=1e2){
+hpd <- function(alpha=3, beta=5, p=0.95, tolerance=1e-4, maxiter=1e2, verbose=FALSE){
 
   # objective function 1
   fn1 <- function(a, b){
@@ -143,7 +145,7 @@ hpd <- function(alpha=3, beta=5, p=0.95, tolerance=1e-4, maxiter=1e2){
     b <- op2$minimum
 
     dif <- fn1(a=a, b=b)
-    print(c(a=a,b=b, dif=dif))
+    if(verbose) print(c(a=a,b=b, dif=dif))
     niter <- niter + 1
     if(niter == maxiter) break
   }

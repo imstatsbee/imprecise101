@@ -7,7 +7,14 @@
 \usage{
 idm(nj, s = 1, N, tj = NA_real_, k, cA = 1)
 
-hpd(alpha = 3, beta = 5, p = 0.95, tolerance = 1e-04, maxiter = 100)
+hpd(
+  alpha = 3,
+  beta = 5,
+  p = 0.95,
+  tolerance = 1e-04,
+  maxiter = 100,
+  verbose = FALSE
+)
 }
 \arguments{
 \item{nj}{number of observations in the j-th category}
@@ -31,6 +38,8 @@ hpd(alpha = 3, beta = 5, p = 0.95, tolerance = 1e-04, maxiter = 100)
 \item{tolerance}{tolerance level}
 
 \item{maxiter}{maximum number of iterations}
+
+\item{verbose}{silence}
 }
 \description{
 lower and upper posterior probabilities
