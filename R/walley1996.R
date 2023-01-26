@@ -11,6 +11,8 @@
 #' @examples
 #' idm(nj=1, N=6, s=2, k=4)
 #' idm(nj=1, N=6, s=1, k=4)
+#' @references
+#' Walley, P. (1996), Inferences from Multinomial Data: Learning About a Bag of Marbles. Journal of the Royal Statistical Society: Series B (Methodological), 58: 3-34. https://doi.org/10.1111/j.2517-6161.1996.tb02065.x
 #' @export
 idm <- function(nj, s=1, N, tj=NA_real_, k, cA=1){
   stopifnot(s >= 0)

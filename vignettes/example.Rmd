@@ -1,5 +1,5 @@
 ---
-title: "example"
+title: "Imprecise Dirichlet Model (Walley, 1996)"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{example}
@@ -108,11 +108,26 @@ round(c(op$p.upper, op$p.lower, op$s.upper, op$s.lower),3)
 ```{r}
 round(hpd(alpha=3, beta=5, p=0.95),4) # s=2
 round(hpd(alpha=3, beta=5, p=0.90),4) # s=2
-round(hpd(alpha=3, beta=5, p=0.50),4) # s=2
+round(hpd(alpha=3, beta=5, p=0.50),4) # s=2 (required for message of failure)
 round(hpd(alpha=2, beta=5, p=0.95),4) # s=1
 round(hpd(alpha=2, beta=5, p=0.90),4) # s=1
 round(hpd(alpha=2, beta=5, p=0.50),4) # s=1
 ```
 
+```{r}
+library(pscl)
+x <- betaHPD(alpha=2, beta=6, p=0.95, plot=TRUE)
+round(x,4)
+```
+
 ### 4.4 Testing Hypotheses about $\theta_R$
 
+$H_0: \theta_R \ge 1/2$ vs $H_a: \theta_R < 1/2$.
+
+```{r}
+fn <- function(x) choose(7,1)*(1-x)^6
+integrate(f=fn, lower=1/2, upper=1)$value
+
+fn <- function(x) dbeta(x, 3, 5)
+integrate(f=fn, lower=1/2, upper=1)$value 
+```

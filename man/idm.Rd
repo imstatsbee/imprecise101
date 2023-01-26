@@ -62,3 +62,6 @@ x <- hpd(alpha=3, beta=5, p=0.5) # c(0.0481, 0.3656) when s=2 (strange/error)
 x <- hpd(alpha=2, beta=5, p=0.5) # c(0.0761, 0.2958) when s=1
 # round(x,4); x*(1-x)^5
 }
+\references{
+Walley, P. (1996), Inferences from Multinomial Data: Learning About a Bag of Marbles. Journal of the Royal Statistical Society: Series B (Methodological), 58: 3-34. https://doi.org/10.1111/j.2517-6161.1996.tb02065.x
+}
