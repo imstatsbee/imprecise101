@@ -48,7 +48,7 @@ idm <- function(nj, s=1, N, tj=NA){
 #' @param alpha shape1 parameter of beta distribution
 #' @param beta shape2 parameter of beta distribution
 #' @param p credible level
-#' @example
+#' @examples
 #' x <- hpd(alpha=3, beta=5, p=0.95) # c(0.0031, 0.6587) when s=2
 #' # round(x,4); x*(1-x)^5
 #' x <- hpd(alpha=2, beta=5, p=0.95) # c(0.0076, 0.5834) when s=1
