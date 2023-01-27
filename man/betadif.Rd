@@ -2,7 +2,7 @@
 % Please edit documentation in R/walley1996.R
 \name{dbetadif}
 \alias{dbetadif}
-\title{Difference of two proportions}
+\title{Distribution of Difference of Two Proportions}
 \usage{
 dbetadif(x, a1, b1, a2, b2)
 }
@@ -18,7 +18,7 @@ dbetadif(x, a1, b1, a2, b2)
 \item{b2}{shape 2 parameter of Beta distribution with treatment}
 }
 \description{
-Difference of two proportions
+Distribution of Difference of Two Proportions
 }
 \references{
 Chen, Y., & Luo, S. (2011). A few remarks on 'Statistical distribution of the difference of two proportions' by Nadarajah and Kotz, Statistics in Medicine 2007; 26 (18): 3518-3523. Statistics in Medicine, 30(15), 1913-1915.

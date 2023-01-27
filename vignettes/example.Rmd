@@ -1,6 +1,6 @@
 ---
-title: "Imprecise Inference under Complete Prior Ignorance"
-author: "Chel Hee Lee"
+title: "Introduction to Imprecise Inference"
+author: "Exercised by Chel Hee Lee"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{example}
@@ -16,70 +16,68 @@ knitr::opts_chunk$set(
   comment = "#>"
 )
 knitr::opts_chunk$set(fig.width = 6, fig.height=6)
+# knitr::opts_chunk$set(tidy.opts=list(width.cutoff=80), tidy=TRUE)
 ```
 
 ```{r setup}
-rm(list=ls())
 library(imprecise101)
 ```
 
 
 ## Imprecise Dirichlet Model 
 
-We draw a sequence of marbles whose colours are (in order): blue, green, blue, blue, green, red. What conclusions can you reach about the probability of drawing a red marble on a future trial? 
+### 4. Bag of Marbles Example 
 
-If $\Omega = \{R, B, G, O\}$, then $n = (1, 3, 2, 0)$ and $L(\theta|n) \propto \theta_R \theta_B^3 \theta_G^2$. 
+#### 4.1. Probabilities of Future Outcomes 
 
-### 4.1. Probabilities of Future Outcomes 
+For $s=2$, $\overline{P}(R|n)=0.375$ and  $\underline{P}(R|n)=0.125$. 
 
-The simplest way of stating our conclusion is to report the posterior upper and lower probabilities of obtaining red on the next trial. 
-
-Using $s=2$, $\overline{P}(R|n)=0.375$ and $\underline{P}(R|n)=0.125$
 ```{r}
 op <- idm(nj=1, s=2, N=6, k=4)
 c(op$p.lower, op$p.upper)
 ```
 
 For $s=1$, $\overline{P}(R|n)=0.286$ and $\underline{P}(R|n)=0.143$. 
+
 ```{r}
 op <- idm(nj=1, s=1, N=6, k=4)
 round(c(op$p.lower, op$p.upper),3)
 ```
 
-For the improper prior density ($s=0$) which gives $P(R|n)=0.167$ irrespective of $\Omega$. 
+For $s=0$, $P(R|n)=0.167$ irrespective of $\Omega$. 
 
 ```{r}
 op <- idm(nj=1, s=0, N=6, k=4)
 round(c(op$p.lower, op$p.upper),3)
 ```
 
-Three possible sample spaces are $\Omega_1=\{R,B,G,O\}$, $\Omega_2=\{R, O\}$, and $\Omega_3=\{LR, DR, O\}$. The parameter values $s=1,2,k/2$, and $k$, where $k$ is the number of elements in $\Omega$. 
-
+Table 1. $P(R|n)$ for different choices of $\Omega$ and $s$ (on page 20)
 ```{r}
-# Omega1
-idm(nj=1, s=1, N=6, k=4)$p
-idm(nj=1, s=2, N=6, k=4)$p
-idm(nj=1, s=4/2, N=6, k=4)$p
-idm(nj=1, s=4, N=6, k=4)$p
+r1 <- c(idm(nj=1, s=1, N=6, k=4)$p, 
+        idm(nj=1, s=2, N=6, k=4)$p, 
+        idm(nj=1, s=4/2, N=6, k=4)$p, 
+        idm(nj=1, s=4, N=6, k=4)$p) # Omega 1
 
-# Omega2
-idm(nj=1, s=1, N=6, k=2)$p
-idm(nj=1, s=2, N=6, k=2)$p
-idm(nj=1, s=2/2, N=6, k=2)$p
-idm(nj=1, s=2, N=6, k=2)$p
+r2 <- c(idm(nj=1, s=1, N=6, k=2)$p, 
+        idm(nj=1, s=2, N=6, k=2)$p, 
+        idm(nj=1, s=2/2, N=6, k=2)$p, 
+        idm(nj=1, s=2, N=6, k=2)$p) # Omega 2 
 
-# Omega3
-idm(nj=1, s=1, N=6, k=3, cA=2)$p
-idm(nj=1, s=2, N=6, k=3, cA=2)$p
-idm(nj=1, s=3/2, N=6, k=3, cA=2)$p
-idm(nj=1, s=3, N=6, k=3, cA=2)$p
+r3 <- c(idm(nj=1, s=1, N=6, k=3, cA=2)$p, 
+        idm(nj=1, s=2, N=6, k=3, cA=2)$p, 
+        idm(nj=1, s=3/2, N=6, k=3, cA=2)$p, 
+        idm(nj=1, s=3, N=6, k=3, cA=2)$p) # Omega 3
 
+tb1 <- rbind(r1, r2, r3)
+rownames(tb1) <- c("Omega1", "Omega2", "Omega3")
+colnames(tb1) <- c("s=1", "s=2", "s=k/2", "s=k")
+round(tb1,3)
 ```
 
-Inferences can also be made about the number of red marbles that will be drawn in $M$ future trials. 
+For $M=6$ and $s=1$, the CDF are: 
 
 ```{r}
-mat <- rbind(
+mat <- cbind(
   unlist(pbetabinom(M=6, x=1, s=1, N=6, y=0)),
   unlist(pbetabinom(M=6, x=1, s=1, N=6, y=1)),
   unlist(pbetabinom(M=6, x=1, s=1, N=6, y=2)),
@@ -88,15 +86,16 @@ mat <- rbind(
   unlist(pbetabinom(M=6, x=1, s=1, N=6, y=5)),
   unlist(pbetabinom(M=6, x=1, s=1, N=6, y=6))
 )
-rownames(mat) <- c("y=0", "y=1", "y=2", "y=3", "y=4", "y=5", "y=6")
+colnames(mat) <- c("y=0", "y=1", "y=2", "y=3", "y=4", "y=5", "y=6")
 round(mat, 3)
 ```
 
-### 4.2 Means and Standard Deviations for $\theta_R$
 
-Taking $s=2$, $\overline{E}(\theta_R|n) = 0.375$, $\underline{E}(\theta_R|n)=0.125$, $\overline{\sigma}(\theta_R|n)=0.188$, and $\underline{\sigma}(\theta_R|n)=0.110$. 
+#### 4.2 Means and Standard Deviations for $\theta_R$
 
-Taking $s=1$, $\overline{E}(\theta_R|n) = 0.286$, $\underline{E}(\theta_R|n)=0.143$, $\overline{\sigma}(\theta_R|n)=0.164$, and $\underline{\sigma}(\theta_R|n)=0.124$. 
+For $s=2$, $\overline{E}(\theta_R|n) = 0.375$, $\underline{E}(\theta_R|n)=0.125$, $\overline{\sigma}(\theta_R|n)=0.188$, and $\underline{\sigma}(\theta_R|n)=0.110$. 
+
+For $s=1$, $\overline{E}(\theta_R|n) = 0.286$, $\underline{E}(\theta_R|n)=0.143$, $\overline{\sigma}(\theta_R|n)=0.164$, and $\underline{\sigma}(\theta_R|n)=0.124$. 
 
 ```{r}
 op <- idm(nj=1, s=2, N=6, k=4)
@@ -106,7 +105,11 @@ op <- idm(nj=1, s=1, N=6, k=4)
 round(c(op$p.upper, op$p.lower, op$s.upper, op$s.lower),3)
 ```
 
-### 4.3 Credible Intervals for $\theta_R$
+#### 4.3 Credible Intervals for $\theta_R$
+
+For $s=2$, 95%, 90%, and 50% credible intervals are $[0.0031, 0.6587]$, $[0.0066, 0.5962]$, and $[0.0481, 0.3656]$, respectively. 
+
+For $s=1$, 95%, 90%, and 50% credible intervals are $[0.0076, 0.5834]$, $[0.0150, 0.5141]$, $[0.0761, 0.2958]$, respectively. 
 
 ```{r}
 round(hpd(alpha=3, beta=5, p=0.95),4) # s=2
@@ -117,15 +120,15 @@ round(hpd(alpha=2, beta=5, p=0.90),4) # s=1
 round(hpd(alpha=2, beta=5, p=0.50),4) # s=1
 ```
 
+HPD interval, uniform prior $(s=2) [0.0133, 0.5273]$. 
 ```{r}
-library(pscl)
-x <- betaHPD(alpha=2, beta=6, p=0.95, plot=FALSE)
+x <- pscl::betaHPD(alpha=2, beta=6, p=0.95, plot=FALSE)
 round(x,4)
 ```
 
-### 4.4 Testing Hypotheses about $\theta_R$
+#### 4.4 Testing Hypotheses about $\theta_R$
 
-$H_0: \theta_R \ge 1/2$ vs $H_a: \theta_R < 1/2$.
+Test $H_0: \theta_R \ge 1/2$ against $H_a: \theta_R < 1/2$. The posterior lower and upper probabilities of $H_0$ are $\underline{P}(H_0|n)=0.00781$ and $\overline{P}(H_0|n)=0.227$. 
 
 ```{r}
 fn <- function(x) choose(7,1)*(1-x)^6
@@ -138,14 +141,35 @@ integrate(f=fn, lower=1/2, upper=1)$value
 
 ## Imprecise Beta Model 
 
+### 5. CT vs ECMO Example 
+
+### 5.5 Deciding when to terminate randomized trials 
+
+```{r out.width="45%"}
+x <- seq(-0.99, 0.99, 0.02)
+ymax <- ymin <- numeric(length(x))
+for(i in 1:length(x)) ymin[i] <- dbetadif(x=x[i], a1=9,b1=2,a2=8,b2=4)
+for(i in 1:length(x)) ymax[i] <- dbetadif(x=x[i], a1=11,b1=0.01,a2=6,b2=6)
+
+plot(x=x, y=cumsum(ymin)/sum(ymin), type="l", ylab="F(z)", xlab="z",
+     main=expression(paste("Fig 1. Posterior upper and lower CDFs for ", psi, 
+                           "=", theta[e]-theta[c])))
+points(x=x, y=cumsum(ymax)/sum(ymax), type="l")
+```
+
+### Further inferences concerning $\theta_c$, $\theta_e$, and $\psi$ from Walley et al (1996)
+
 ```{r out.width="45%", echo=FALSE}
 tc <- seq(0,1,0.1)
 s <- 2
 
 ibm(n=10, m=6, xlab1="z", main1=expression(paste("Fig 1. Posterior ", theta[c], " based on ", s==2)))
+
 ibm(n=9, m=9, xlab1="z", main1=expression(paste("Fig 2. Posterior ", theta[e], " based on ", s==2)))
+```
 
 
+```{r out.width="45%", echo=FALSE}
 x <- seq(-0.99, 0.99, 0.02)
 ymax <- ymin <- numeric(length(x))
 for(i in 1:length(x)) ymin[i] <- dbetadif(x=x[i], a1=9,b1=2,a2=8,b2=4)
@@ -153,11 +177,21 @@ for(i in 1:length(x)) ymax[i] <- dbetadif(x=x[i], a1=11,b1=0.01,a2=6,b2=6)
 
 plot(x=x, y=1-cumsum(ymin)/sum(ymin), type="l", ylab="G(z)", xlab="z", main=expression(paste("Fig 3. ", psi, "=", theta[e]-theta[c], " Walley 1996 p.496" )))
 points(x=x, y=1-cumsum(ymax)/sum(ymax), type="l")
-```
 
-```{r}
 dmin <- 1-cumsum(ymin/sum(ymin))
 dmax <- 1-cumsum(ymax/sum(ymax))
 ```
 
 Since the imprecision is the area between lower and upper probabilities, $A = \overline{E} - \underline{E}$ =`r sum((dmax - dmin)*0.02)`
+
+
+## TODO
+
+* Decision problem from Walley et al (1996)
+
+## References 
+
+Walley, Peter. “Inferences from Multinomial Data: Learning about a Bag of Marbles.” Journal of the Royal Statistical Society. Series B (Methodological), vol. 58, no. 1, 1996, pp. 3–57. JSTOR, http://www.jstor.org/stable/2346164. Accessed 27 Jan. 2023.
+
+Walley, Peter, et al. “Analysis of Clinical Data Using Imprecise Prior Probabilities.” Journal of the Royal Statistical Society. Series D (The Statistician), vol. 45, no. 4, 1996, pp. 457–85. JSTOR, https://doi.org/10.2307/2988546. Accessed 27 Jan. 2023.
+

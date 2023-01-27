@@ -3,7 +3,7 @@
 \name{idm}
 \alias{idm}
 \alias{hpd}
-\title{imprecise Dirichlet model}
+\title{Imprecise Dirichlet Model}
 \usage{
 idm(nj, s = 1, N, tj = NA_real_, k, cA = 1)
 
@@ -17,38 +17,37 @@ hpd(
 )
 }
 \arguments{
-\item{nj}{number of observations in the j-th category}
+\item{nj}{number of observations in the j th category}
 
 \item{s}{learning parameter}
 
-\item{N}{a total number of drawings}
+\item{N}{total number of drawings}
 
-\item{tj}{proability}
+\item{tj}{mean probability associated with the j th category}
 
-\item{k}{number of elements in Omega}
+\item{k}{number of elements in the sample space}
 
-\item{cA}{the number of elements in A}
+\item{cA}{the number of elements in the event A}
 
 \item{alpha}{shape1 parameter of beta distribution}
 
 \item{beta}{shape2 parameter of beta distribution}
 
-\item{p}{credible level}
+\item{p}{level of credible interval}
 
-\item{tolerance}{tolerance level}
+\item{tolerance}{level of error allowed}
 
 \item{maxiter}{maximum number of iterations}
 
-\item{verbose}{silence}
+\item{verbose}{logical option suppressing messages}
 }
 \description{
-lower and upper posterior probabilities
+This function computes lower and upper posterior probabilities under an imprecise Dirichlet model when prior information is not available.
 
-Find the highest posterior density interval
+This function searches for the lower and upper bounds of a given level of the highest posterior density interval under the imprecise Dirichlet prior.
 }
 \examples{
 idm(nj=1, N=6, s=2, k=4)
-idm(nj=1, N=6, s=1, k=4)
 x <- hpd(alpha=3, beta=5, p=0.95) # c(0.0031, 0.6587) when s=2
 # round(x,4); x*(1-x)^5
 }

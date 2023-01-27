@@ -10,22 +10,22 @@ dbetabinom(i, M, x, s, N, tA)
 pbetabinom(M, x, s, N, y)
 }
 \arguments{
-\item{i}{the number of occurrences of A in M future trials}
+\item{i}{number of occurrences of event A in the M future trials}
 
-\item{M}{a number of future trials}
+\item{M}{number of future trials}
 
-\item{x}{the number of occurrence of A in N previous trials}
+\item{x}{number of occurrence of event A in the N previous trials}
 
 \item{s}{learning parameter}
 
-\item{N}{a total number of previous trials}
+\item{N}{total number of previous trials}
 
-\item{tA}{the prior probability of A under the Dirichlet prior}
+\item{tA}{prior probability of event A under the Dirichlet prior}
 
-\item{y}{the number of occurrences of A in M future trials}
+\item{y}{maximum number of occurrences of event A in the M future trials}
 }
 \description{
-Density function of beta-binomial distribution
+This function computes the predictive posterior density of the outcome of interest under the imprecise Dirichlet prior distribution. It follows a beta-binomial distribution.
 }
 \examples{
 pbetabinom(M=6, x=1, s=1, N=6, y=0)

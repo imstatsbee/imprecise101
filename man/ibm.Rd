@@ -2,28 +2,28 @@
 % Please edit documentation in R/walley1996.R
 \name{ibm}
 \alias{ibm}
-\title{impreicse beta model}
+\title{Impreicse Beta Model}
 \usage{
-ibm(n = 10, m = 6, s0 = 2, xlab1, main1)
+ibm(n = 10, m = 6, s0 = 2, xlab1 = NA, main1 = NA)
 }
 \arguments{
-\item{n}{total of observations}
+\item{n}{total of trials}
 
-\item{m}{number of observations seen}
+\item{m}{number of observations realized}
 
 \item{s0}{learning parameter}
 
-\item{xlab1}{label}
+\item{xlab1}{x axis text}
 
-\item{main1}{main}
+\item{main1}{main title text}
 }
 \description{
-imprecise beta model
+This function computes lower and upper posterior probabilities under an imprecise Beta model when prior information is not available.
 }
 \examples{
 tc <- seq(0,1,0.1)
 s <- 2
-ibm(n=10, m=6, xlab1="z", main1=expression(paste("Fig 1. Posterior ", theta[c], " based on ", s==2)))
+ibm(n=10, m=6)
 }
 \references{
 Walley, P. (1996), Inferences from Multinomial Data: Learning About a Bag of Marbles. Journal of the Royal Statistical Society: Series B (Methodological), 58: 3-34. https://doi.org/10.1111/j.2517-6161.1996.tb02065.x

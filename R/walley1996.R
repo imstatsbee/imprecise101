@@ -1,16 +1,15 @@
 #'
 #' @rdname idm
-#' @title imprecise Dirichlet model
-#' @description lower and upper posterior probabilities
-#' @param nj number of observations in the j-th category
+#' @title Imprecise Dirichlet Model
+#' @description This function computes lower and upper posterior probabilities under an imprecise Dirichlet model when prior information is not available.
+#' @param nj number of observations in the j th category
 #' @param s learning parameter
-#' @param N a total number of drawings
-#' @param k number of elements in Omega
-#' @param tj proability
-#' @param cA the number of elements in A
+#' @param N total number of drawings
+#' @param k number of elements in the sample space
+#' @param tj mean probability associated with the j th category
+#' @param cA the number of elements in the event A
 #' @examples
 #' idm(nj=1, N=6, s=2, k=4)
-#' idm(nj=1, N=6, s=1, k=4)
 #' @references
 #' Walley, P. (1996), Inferences from Multinomial Data: Learning About a Bag of Marbles. Journal of the Royal Statistical Society: Series B (Methodological), 58: 3-34. https://doi.org/10.1111/j.2517-6161.1996.tb02065.x
 #' @export
@@ -50,14 +49,14 @@ idm <- function(nj, s=1, N, tj=NA_real_, k, cA=1){
 
 #' @rdname betabinom
 #' @title Beta-Binomial Distribution
-#' @description Density function of beta-binomial distribution
-#' @param x the number of occurrence of A in N previous trials
-#' @param N a total number of previous trials
-#' @param M a number of future trials
-#' @param i the number of occurrences of A in M future trials
-#' @param tA the prior probability of A under the Dirichlet prior
+#' @description This function computes the predictive posterior density of the outcome of interest under the imprecise Dirichlet prior distribution. It follows a beta-binomial distribution.
+#' @param x number of occurrence of event A in the N previous trials
+#' @param N total number of previous trials
+#' @param M number of future trials
+#' @param i number of occurrences of event A in the M future trials
+#' @param y maximum number of occurrences of event A in the M future trials
+#' @param tA prior probability of event A under the Dirichlet prior
 #' @param s learning parameter
-#' @param y the number of occurrences of A in M future trials
 #' @examples
 #' pbetabinom(M=6, x=1, s=1, N=6, y=0)
 #' @export
@@ -90,14 +89,14 @@ pbetabinom <- function(M, x, s, N, y){
 
 
 #' @rdname idm
-#' @title Find HPD
-#' @description Find the highest posterior density interval
+#' @title Highest Posterior Density Interval
+#' @description This function searches for the lower and upper bounds of a given level of the highest posterior density interval under the imprecise Dirichlet prior.
 #' @param maxiter maximum number of iterations
-#' @param tolerance tolerance level
+#' @param tolerance level of error allowed
 #' @param alpha shape1 parameter of beta distribution
 #' @param beta shape2 parameter of beta distribution
-#' @param p credible level
-#' @param verbose silence
+#' @param p level of credible interval
+#' @param verbose logical option suppressing messages
 #' @examples
 #' x <- hpd(alpha=3, beta=5, p=0.95) # c(0.0031, 0.6587) when s=2
 #' # round(x,4); x*(1-x)^5
@@ -150,21 +149,21 @@ hpd <- function(alpha=3, beta=5, p=0.95, tolerance=1e-4, maxiter=1e2, verbose=FA
 
 
 #' @rdname ibm
-#' @title impreicse beta model
-#' @description imprecise beta model
-#' @param n total of observations
-#' @param m number of observations seen
+#' @title Impreicse Beta Model
+#' @description This function computes lower and upper posterior probabilities under an imprecise Beta model when prior information is not available.
+#' @param n total of trials
+#' @param m number of observations realized
 #' @param s0 learning parameter
-#' @param xlab1 label
-#' @param main1 main
+#' @param xlab1 x axis text
+#' @param main1 main title text
 #' @references
 #' Walley, P. (1996), Inferences from Multinomial Data: Learning About a Bag of Marbles. Journal of the Royal Statistical Society: Series B (Methodological), 58: 3-34. https://doi.org/10.1111/j.2517-6161.1996.tb02065.x
 #' @examples
 #' tc <- seq(0,1,0.1)
 #' s <- 2
-#' ibm(n=10, m=6, xlab1="z", main1=expression(paste("Fig 1. Posterior ", theta[c], " based on ", s==2)))
+#' ibm(n=10, m=6)
 #' @export
-ibm <- function(n=10, m=6, s0=2, xlab1, main1){
+ibm <- function(n=10, m=6, s0=2, xlab1=NA, main1=NA){
 
   # a set of priors
   t0 <- seq(from=0.0, to=1, by=0.1)
@@ -196,7 +195,7 @@ ibm <- function(n=10, m=6, s0=2, xlab1, main1){
 
 
 #' @rdname betadif
-#' @title Difference of two proportions
+#' @title Distribution of Difference of Two Proportions
 #' @param x difference of two beta distributions
 #' @param a1 shape 1 parameter of Beta distribution with control
 #' @param b1 shape 2 parameter of Beta distribution with control
