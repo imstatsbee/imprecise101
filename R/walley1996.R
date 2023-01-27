@@ -58,7 +58,7 @@ idm <- function(nj, s=1, N, tj=NA_real_, k, cA=1){
 #' @param tA the prior probability of A under the Dirichlet prior
 #' @param s learning parameter
 #' @param y the number of occurrences of A in M future trials
-#' @example
+#' @examples
 #' pbetabinom(M=6, x=1, s=1, N=6, y=0)
 #' @export
 dbetabinom <- function(i, M, x, s, N, tA){
@@ -100,16 +100,6 @@ pbetabinom <- function(M, x, s, N, y){
 #' @param verbose silence
 #' @examples
 #' x <- hpd(alpha=3, beta=5, p=0.95) # c(0.0031, 0.6587) when s=2
-#' # round(x,4); x*(1-x)^5
-#' x <- hpd(alpha=2, beta=5, p=0.95) # c(0.0076, 0.5834) when s=1
-#' # round(x,4); x*(1-x)^5
-#' x <- hpd(alpha=3, beta=5, p=0.9) # c(0.0066, 0.5962) when s=2
-#' # round(x,4); x*(1-x)^5
-#' x <- hpd(alpha=2, beta=5, p=0.9) # c(0.0150, 0.5141) when s=1
-#' # round(x,4); x*(1-x)^5
-#' x <- hpd(alpha=3, beta=5, p=0.5) # c(0.0481, 0.3656) when s=2 (strange/error)
-#' # round(x,4); x*(1-x)^5
-#' x <- hpd(alpha=2, beta=5, p=0.5) # c(0.0761, 0.2958) when s=1
 #' # round(x,4); x*(1-x)^5
 #' @export
 hpd <- function(alpha=3, beta=5, p=0.95, tolerance=1e-4, maxiter=1e2, verbose=FALSE){
@@ -159,10 +149,72 @@ hpd <- function(alpha=3, beta=5, p=0.95, tolerance=1e-4, maxiter=1e2, verbose=FA
 
 
 
-#
-# Eqn 2. P(D(l)|n) = \int_a^b 105 t^2 (1-t)^4 dt = 0.95
-# computing the 95% credible interval (highest posterior density interval)
-#
-# library(pscl)
-# x <- betaHPD(alpha=3, beta=5, p=0.95, plot=TRUE)
-#
+#' @rdname ibm
+#' @title impreicse beta model
+#' @description imprecise beta model
+#' @param n total of observations
+#' @param m number of observations seen
+#' @param s0 learning parameter
+#' @param xlab1 label
+#' @param main1 main
+#' @references
+#' Walley, P. (1996), Inferences from Multinomial Data: Learning About a Bag of Marbles. Journal of the Royal Statistical Society: Series B (Methodological), 58: 3-34. https://doi.org/10.1111/j.2517-6161.1996.tb02065.x
+#' @examples
+#' tc <- seq(0,1,0.1)
+#' s <- 2
+#' ibm(n=10, m=6, xlab1="z", main1=expression(paste("Fig 1. Posterior ", theta[c], " based on ", s==2)))
+#' @export
+ibm <- function(n=10, m=6, s0=2, xlab1, main1){
+
+  # a set of priors
+  t0 <- seq(from=0.0, to=1, by=0.1)
+
+  # translation of mean parameters
+  sn <- s0 + n
+  tn <- (s0*t0 + m)/(s0+n)
+
+  # parameter space for theta
+  theta <- seq(from=0, to=1, by=0.02)
+
+  # Updating the parameters of posterior distributions
+  alpha.n <- sn*tn
+  beta.n <- sn*(1-tn)
+
+  # Calculating the CDF of posteriors
+  fn <- function(x, y, ...) stats::pbeta(q=theta, shape1=x, shape2=y)
+
+  posteriors <- as.data.frame(mapply(fn, x=alpha.n, y=beta.n))
+
+  plot(x=theta, y=rep(0, length(theta)), type='n', ylim=c(0,1), ylab="F(z)", xlab=xlab1, main=main1)
+  lapply(posteriors, graphics::lines, x=theta, type='l', lty=3)
+  graphics::text(x=0.1, y=0.9, bquote(paste("n=", .(n), ", m=", .(m))))
+
+  graphics::lines(x=theta, y=posteriors[[1]], col='blue') # upper probabilities
+  graphics::lines(x=theta, y=posteriors[[length(t0)]], col='red') # lower probabilities
+  graphics::abline(v=m/n)
+}
+
+
+#' @rdname betadif
+#' @title Difference of two proportions
+#' @param x difference of two beta distributions
+#' @param a1 shape 1 parameter of Beta distribution with control
+#' @param b1 shape 2 parameter of Beta distribution with control
+#' @param a2 shape 1 parameter of Beta distribution with treatment
+#' @param b2 shape 2 parameter of Beta distribution with treatment
+#' @references
+#' Chen, Y., & Luo, S. (2011). A few remarks on 'Statistical distribution of the difference of two proportions' by Nadarajah and Kotz, Statistics in Medicine 2007; 26 (18): 3518-3523. Statistics in Medicine, 30(15), 1913-1915.
+#' @export
+dbetadif <- function(x, a1, b1, a2, b2){
+
+  stopifnot(-1<= x & x <= 1)
+  stopifnot(a1 > 0 & b1 > 0 & a2 > 0 & b2 > 0)
+
+  if(x <= 0 & x > -1){
+    v <- ((-x)^(b1+b2-1) * (1+x)^(a1+b2-1)) / (gamma(b1)*gamma(a2)*gamma(a1+b2)) * tolerance::F1(a=b2, b=a1+a2+b1+b2-2, b.prime=1-a2, c=a1+b2, x=1+x, y=1-x^2)
+  } else { # x > 0 & x <= 1
+    v <- x^(b1+b2-1)*(1-x)^(a2+b1-1) / (gamma(b2)*gamma(a1)*gamma(a2+b1)) * tolerance::F1(a=b1, b=a1+a2+b1+b2-2, b.prime=1-a1, c=a2+b1, x=1-x, y=1-x^2)
+  }
+  v <- v*gamma(a1+b1)*gamma(a2+b2)
+  return(v)
+}

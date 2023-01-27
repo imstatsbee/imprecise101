@@ -49,18 +49,6 @@ Find the highest posterior density interval
 \examples{
 idm(nj=1, N=6, s=2, k=4)
 idm(nj=1, N=6, s=1, k=4)
-x <- hpd(alpha=3, beta=5, p=0.95) # c(0.0031, 0.6587) when s=2
-# round(x,4); x*(1-x)^5
-x <- hpd(alpha=2, beta=5, p=0.95) # c(0.0076, 0.5834) when s=1
-# round(x,4); x*(1-x)^5
-x <- hpd(alpha=3, beta=5, p=0.9) # c(0.0066, 0.5962) when s=2
-# round(x,4); x*(1-x)^5
-x <- hpd(alpha=2, beta=5, p=0.9) # c(0.0150, 0.5141) when s=1
-# round(x,4); x*(1-x)^5
-x <- hpd(alpha=3, beta=5, p=0.5) # c(0.0481, 0.3656) when s=2 (strange/error)
-# round(x,4); x*(1-x)^5
-x <- hpd(alpha=2, beta=5, p=0.5) # c(0.0761, 0.2958) when s=1
-# round(x,4); x*(1-x)^5
 }
 \references{
 Walley, P. (1996), Inferences from Multinomial Data: Learning About a Bag of Marbles. Journal of the Royal Statistical Society: Series B (Methodological), 58: 3-34. https://doi.org/10.1111/j.2517-6161.1996.tb02065.x

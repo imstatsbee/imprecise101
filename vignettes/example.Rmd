@@ -1,5 +1,6 @@
 ---
-title: "Imprecise Dirichlet Model (Walley, 1996)"
+title: "Imprecise Inference under Complete Prior Ignorance"
+author: "Chel Hee Lee"
 output: rmarkdown::html_vignette
 vignette: >
   %\VignetteIndexEntry{example}
@@ -14,6 +15,7 @@ knitr::opts_chunk$set(
   collapse = TRUE,
   comment = "#>"
 )
+knitr::opts_chunk$set(fig.width = 6, fig.height=6)
 ```
 
 ```{r setup}
@@ -21,7 +23,8 @@ rm(list=ls())
 library(imprecise101)
 ```
 
-## Examples 
+
+## Imprecise Dirichlet Model 
 
 We draw a sequence of marbles whose colours are (in order): blue, green, blue, blue, green, red. What conclusions can you reach about the probability of drawing a red marble on a future trial? 
 
@@ -116,7 +119,7 @@ round(hpd(alpha=2, beta=5, p=0.50),4) # s=1
 
 ```{r}
 library(pscl)
-x <- betaHPD(alpha=2, beta=6, p=0.95, plot=TRUE)
+x <- betaHPD(alpha=2, beta=6, p=0.95, plot=FALSE)
 round(x,4)
 ```
 
@@ -131,3 +134,30 @@ integrate(f=fn, lower=1/2, upper=1)$value
 fn <- function(x) dbeta(x, 3, 5)
 integrate(f=fn, lower=1/2, upper=1)$value 
 ```
+
+
+## Imprecise Beta Model 
+
+```{r out.width="45%", echo=FALSE}
+tc <- seq(0,1,0.1)
+s <- 2
+
+ibm(n=10, m=6, xlab1="z", main1=expression(paste("Fig 1. Posterior ", theta[c], " based on ", s==2)))
+ibm(n=9, m=9, xlab1="z", main1=expression(paste("Fig 2. Posterior ", theta[e], " based on ", s==2)))
+
+
+x <- seq(-0.99, 0.99, 0.02)
+ymax <- ymin <- numeric(length(x))
+for(i in 1:length(x)) ymin[i] <- dbetadif(x=x[i], a1=9,b1=2,a2=8,b2=4)
+for(i in 1:length(x)) ymax[i] <- dbetadif(x=x[i], a1=11,b1=0.01,a2=6,b2=6)
+
+plot(x=x, y=1-cumsum(ymin)/sum(ymin), type="l", ylab="G(z)", xlab="z", main=expression(paste("Fig 3. ", psi, "=", theta[e]-theta[c], " Walley 1996 p.496" )))
+points(x=x, y=1-cumsum(ymax)/sum(ymax), type="l")
+```
+
+```{r}
+dmin <- 1-cumsum(ymin/sum(ymin))
+dmax <- 1-cumsum(ymax/sum(ymax))
+```
+
+Since the imprecision is the area between lower and upper probabilities, $A = \overline{E} - \underline{E}$ =`r sum((dmax - dmin)*0.02)`

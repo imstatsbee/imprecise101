@@ -27,3 +27,6 @@ pbetabinom(M, x, s, N, y)
 \description{
 Density function of beta-binomial distribution
 }
+\examples{
+pbetabinom(M=6, x=1, s=1, N=6, y=0)
+}
