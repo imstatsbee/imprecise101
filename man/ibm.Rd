@@ -20,6 +20,11 @@ ibm(n = 10, m = 6, s0 = 2, xlab1, main1)
 \description{
 imprecise beta model
 }
+\examples{
+tc <- seq(0,1,0.1)
+s <- 2
+ibm(n=10, m=6, xlab1="z", main1=expression(paste("Fig 1. Posterior ", theta[c], " based on ", s==2)))
+}
 \references{
 Walley, P. (1996), Inferences from Multinomial Data: Learning About a Bag of Marbles. Journal of the Royal Statistical Society: Series B (Methodological), 58: 3-34. https://doi.org/10.1111/j.2517-6161.1996.tb02065.x
 }
