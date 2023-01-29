@@ -3,7 +3,7 @@ title: "Introduction to Imprecise Inference"
 author: "Exercised by Chel Hee Lee"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{example}
+  %\VignetteIndexEntry{Introduction to Imprecise Inference}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
