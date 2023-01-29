@@ -1,6 +1,6 @@
 Package: imprecise101
 Title: Introduction to Imprecise Probabilities
-Version: 0.2.2.1
+Version: 0.2.2.2
 Authors@R: c(
   person(given="Chel Hee", family="Lee", email="chelhee.lee@ucalgary.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8209-8176")), 
   person(given="Mikelis", family="Bickis", email="bickis@math.usask.ca", role="ctb"), 
