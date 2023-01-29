@@ -1,9 +1,10 @@
 Package: imprecise101
 Title: Introduction to Imprecise Probabilities
-Version: 0.1.2.4
+Version: 0.2.1.9
 Authors@R: c(
   person(given="Chel Hee", family="Lee", email="chelhee.lee@ucalgary.ca", role = c("aut", "cre"), comment = c(ORCID = "0000-0001-8209-8176")), 
-  person(given="Mikelis", family="Bickis", email="bickis@math.usask.ca", role="ctb"))
+  person(given="Mikelis", family="Bickis", email="bickis@math.usask.ca", role="ctb"), 
+  person(given="Angela", family="McCourt", email="amccpersonal@gmail.com", role="ctb"))
 Description: This package provides functions and utils needed for illustrating the examples of imprecise inference presented in the study of Walley (1996) <https://doi.org/10.1111/j.2517-6161.1996.tb02065.x>. Two imprecise models are exercised with multinomial data and 2x2 contingency table data for classroom teaching. The concept of prior ignorance, representation invariance principle, hypothesis testing, decision-making, and further generalization is also exercised.
 License: GPL-3
 Encoding: UTF-8
