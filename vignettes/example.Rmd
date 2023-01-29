@@ -1,9 +1,9 @@
 ---
-title: "Introduction to Imprecise Inference"
+title: "Example"
 author: "Exercised by Chel Hee Lee"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Introduction to Imprecise Inference}
+  %\VignetteIndexEntry{Example}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
