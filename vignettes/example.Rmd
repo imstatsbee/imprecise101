@@ -8,6 +8,9 @@ vignette: >
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
   chunk_output_type: console
+bibliography: references.bib
+nocite: | 
+    @Walley1991, @Bernard2005
 ---
 
 ```{r, include = FALSE}
@@ -27,6 +30,8 @@ library(imprecise101)
 ## Imprecise Dirichlet Model 
 
 ### 4. Bag of Marbles Example 
+
+This example is taken from @Walley1996a. 
 
 #### 4.1. Probabilities of Future Outcomes 
 
@@ -143,6 +148,8 @@ integrate(f=fn, lower=1/2, upper=1)$value
 
 ### 5. CT vs ECMO Example 
 
+This example is taken from @Walley1996a. 
+
 ### 5.5 Deciding when to terminate randomized trials 
 
 ```{r out.width="45%"}
@@ -157,7 +164,9 @@ plot(x=x, y=cumsum(ymin)/sum(ymin), type="l", ylab="F(z)", xlab="z",
 points(x=x, y=cumsum(ymax)/sum(ymax), type="l")
 ```
 
-### Further inferences concerning $\theta_c$, $\theta_e$, and $\psi$ from Walley et al (1996)
+### Further inferences concerning $\theta_c$, $\theta_e$, and $\psi$ 
+
+This example is taken from @Walley1996a.
 
 ```{r out.width="45%", echo=FALSE}
 tc <- seq(0,1,0.1)
@@ -187,11 +196,10 @@ Since the imprecision is the area between lower and upper probabilities, $A = \o
 
 ## TODO
 
-* Decision problem from Walley et al (1996)
+* Add the examples of decision problem from @Walley1996b. 
+
 
 ## References 
+<div id="refs"></div>
 
-Walley, Peter. “Inferences from Multinomial Data: Learning about a Bag of Marbles.” Journal of the Royal Statistical Society. Series B (Methodological), vol. 58, no. 1, 1996, pp. 3–57. JSTOR, http://www.jstor.org/stable/2346164. Accessed 27 Jan. 2023.
-
-Walley, Peter, et al. “Analysis of Clinical Data Using Imprecise Prior Probabilities.” Journal of the Royal Statistical Society. Series D (The Statistician), vol. 45, no. 4, 1996, pp. 457–85. JSTOR, https://doi.org/10.2307/2988546. Accessed 27 Jan. 2023.
-
+## Appendix 
