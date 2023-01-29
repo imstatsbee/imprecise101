@@ -1,9 +1,9 @@
 ---
-title: "Example"
+title: "example"
 author: "Exercised by Chel Hee Lee"
 output: rmarkdown::html_vignette
 vignette: >
-  %\VignetteIndexEntry{Example}
+  %\VignetteIndexEntry{example}
   %\VignetteEncoding{UTF-8}
   %\VignetteEngine{knitr::rmarkdown}
 editor_options: 
