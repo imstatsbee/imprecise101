@@ -41,6 +41,19 @@ hpd(
 
 \item{verbose}{logical option suppressing messages}
 }
+\value{
+\code{idm} returns a list of lower and upper probabilities.
+\item{p.lower}{Minimum of imprecise probabilities}
+\item{p.upper}{Maximum of imprecise probabilities}
+\item{v.lower}{Variance of lower bound}
+\item{v.upper}{Variance of upper bound}
+\item{s.lower}{Standard deviation of lower bound}
+\item{s.upper}{Standard deviation of upper bound}
+\item{p}{Precise probabilty}
+\item{p.delta}{Degree of imprecision}
+
+\code{hpd} gives a list of scalar values corresponding to the lower and upper bounds of highest posterior probability density region.
+}
 \description{
 This function computes lower and upper posterior probabilities under an imprecise Dirichlet model when prior information is not available.
 

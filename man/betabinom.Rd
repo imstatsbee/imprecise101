@@ -24,6 +24,9 @@ pbetabinom(M, x, s, N, y)
 
 \item{y}{maximum number of occurrences of event A in the M future trials}
 }
+\value{
+\code{dbetabinom} returns a scalar value of density and \code{pdetabinom} returns a list of scalars corresponding to the lower and upper probabilities of the distribution.
+}
 \description{
 This function computes the predictive posterior density of the outcome of interest under the imprecise Dirichlet prior distribution. It follows a beta-binomial distribution.
 }

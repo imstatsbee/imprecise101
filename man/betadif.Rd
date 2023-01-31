@@ -17,6 +17,9 @@ dbetadif(x, a1, b1, a2, b2)
 
 \item{b2}{shape 2 parameter of Beta distribution with treatment}
 }
+\value{
+\code{betadif} gives a scalar value of density.
+}
 \description{
 Distribution of Difference of Two Proportions
 }

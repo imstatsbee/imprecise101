@@ -12,6 +12,15 @@
 #' idm(nj=1, N=6, s=2, k=4)
 #' @references
 #' Walley, P. (1996), Inferences from Multinomial Data: Learning About a Bag of Marbles. Journal of the Royal Statistical Society: Series B (Methodological), 58: 3-34. https://doi.org/10.1111/j.2517-6161.1996.tb02065.x
+#' @returns \code{idm} returns a list of lower and upper probabilities.
+#' \item{p.lower}{Minimum of imprecise probabilities}
+#' \item{p.upper}{Maximum of imprecise probabilities}
+#' \item{v.lower}{Variance of lower bound}
+#' \item{v.upper}{Variance of upper bound}
+#' \item{s.lower}{Standard deviation of lower bound}
+#' \item{s.upper}{Standard deviation of upper bound}
+#' \item{p}{Precise probabilty}
+#' \item{p.delta}{Degree of imprecision}
 #' @export
 idm <- function(nj, s=1, N, tj=NA_real_, k, cA=1){
   stopifnot(s >= 0)
@@ -57,6 +66,7 @@ idm <- function(nj, s=1, N, tj=NA_real_, k, cA=1){
 #' @param y maximum number of occurrences of event A in the M future trials
 #' @param tA prior probability of event A under the Dirichlet prior
 #' @param s learning parameter
+#' @returns \code{dbetabinom} returns a scalar value of density and \code{pdetabinom} returns a list of scalars corresponding to the lower and upper probabilities of the distribution.
 #' @examples
 #' pbetabinom(M=6, x=1, s=1, N=6, y=0)
 #' @export
@@ -97,6 +107,7 @@ pbetabinom <- function(M, x, s, N, y){
 #' @param beta shape2 parameter of beta distribution
 #' @param p level of credible interval
 #' @param verbose logical option suppressing messages
+#' @returns \code{hpd} gives a list of scalar values corresponding to the lower and upper bounds of highest posterior probability density region.
 #' @examples
 #' x <- hpd(alpha=3, beta=5, p=0.95) # c(0.0031, 0.6587) when s=2
 #' # round(x,4); x*(1-x)^5
@@ -154,16 +165,18 @@ hpd <- function(alpha=3, beta=5, p=0.95, tolerance=1e-4, maxiter=1e2, verbose=FA
 #' @param n total of trials
 #' @param m number of observations realized
 #' @param s0 learning parameter
+#' @param showplot logical, TRUE by default
 #' @param xlab1 x axis text
 #' @param main1 main title text
 #' @references
 #' Walley, P. (1996), Inferences from Multinomial Data: Learning About a Bag of Marbles. Journal of the Royal Statistical Society: Series B (Methodological), 58: 3-34. https://doi.org/10.1111/j.2517-6161.1996.tb02065.x
+#' @returns \code{ibm} returns data.frame containing posterior probabilities on the mean parameter space.
 #' @examples
 #' tc <- seq(0,1,0.1)
 #' s <- 2
 #' ibm(n=10, m=6)
 #' @export
-ibm <- function(n=10, m=6, s0=2, xlab1=NA, main1=NA){
+ibm <- function(n=10, m=6, s0=2, showplot=TRUE, xlab1=NA, main1=NA){
 
   # a set of priors
   t0 <- seq(from=0.0, to=1, by=0.1)
@@ -172,7 +185,7 @@ ibm <- function(n=10, m=6, s0=2, xlab1=NA, main1=NA){
   sn <- s0 + n
   tn <- (s0*t0 + m)/(s0+n)
 
-  # parameter space for theta
+  # mean parameter space for theta
   theta <- seq(from=0, to=1, by=0.02)
 
   # Updating the parameters of posterior distributions
@@ -184,13 +197,17 @@ ibm <- function(n=10, m=6, s0=2, xlab1=NA, main1=NA){
 
   posteriors <- as.data.frame(mapply(fn, x=alpha.n, y=beta.n))
 
-  plot(x=theta, y=rep(0, length(theta)), type='n', ylim=c(0,1), ylab="F(z)", xlab=xlab1, main=main1)
-  lapply(posteriors, graphics::lines, x=theta, type='l', lty=3)
-  graphics::text(x=0.1, y=0.9, bquote(paste("n=", .(n), ", m=", .(m))))
+  if(showplot){
+    plot(x=theta, y=rep(0, length(theta)), type='n', ylim=c(0,1), ylab="F(z)", xlab=xlab1, main=main1)
+    lapply(posteriors, graphics::lines, x=theta, type='l', lty=3)
+    graphics::text(x=0.1, y=0.9, bquote(paste("n=", .(n), ", m=", .(m))))
 
-  graphics::lines(x=theta, y=posteriors[[1]], col='blue') # upper probabilities
-  graphics::lines(x=theta, y=posteriors[[length(t0)]], col='red') # lower probabilities
-  graphics::abline(v=m/n)
+    graphics::lines(x=theta, y=posteriors[[1]], col='blue') # upper probabilities
+    graphics::lines(x=theta, y=posteriors[[length(t0)]], col='red') # lower probabilities
+    graphics::abline(v=m/n)
+  }
+
+  return(posteriors=posteriors)
 }
 
 
@@ -201,6 +218,7 @@ ibm <- function(n=10, m=6, s0=2, xlab1=NA, main1=NA){
 #' @param b1 shape 2 parameter of Beta distribution with control
 #' @param a2 shape 1 parameter of Beta distribution with treatment
 #' @param b2 shape 2 parameter of Beta distribution with treatment
+#' @returns \code{betadif} gives a scalar value of density.
 #' @references
 #' Chen, Y., & Luo, S. (2011). A few remarks on 'Statistical distribution of the difference of two proportions' by Nadarajah and Kotz, Statistics in Medicine 2007; 26 (18): 3518-3523. Statistics in Medicine, 30(15), 1913-1915.
 #' @export

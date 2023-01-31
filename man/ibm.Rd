@@ -4,7 +4,7 @@
 \alias{ibm}
 \title{Impreicse Beta Model}
 \usage{
-ibm(n = 10, m = 6, s0 = 2, xlab1 = NA, main1 = NA)
+ibm(n = 10, m = 6, s0 = 2, showplot = TRUE, xlab1 = NA, main1 = NA)
 }
 \arguments{
 \item{n}{total of trials}
@@ -13,9 +13,14 @@ ibm(n = 10, m = 6, s0 = 2, xlab1 = NA, main1 = NA)
 
 \item{s0}{learning parameter}
 
+\item{showplot}{logical, TRUE by default}
+
 \item{xlab1}{x axis text}
 
 \item{main1}{main title text}
+}
+\value{
+\code{ibm} returns data.frame containing posterior probabilities on the mean parameter space.
 }
 \description{
 This function computes lower and upper posterior probabilities under an imprecise Beta model when prior information is not available.

@@ -172,9 +172,9 @@ This example is taken from @Walley1996a.
 tc <- seq(0,1,0.1)
 s <- 2
 
-ibm(n=10, m=6, xlab1="z", main1=expression(paste("Fig 1. Posterior ", theta[c], " based on ", s==2)))
+op <- ibm(n=10, m=6, showplot=TRUE, xlab1="z", main1=expression(paste("Fig 1. Posterior ", theta[c], " based on ", s==2)))
 
-ibm(n=9, m=9, xlab1="z", main1=expression(paste("Fig 2. Posterior ", theta[e], " based on ", s==2)))
+op <- ibm(n=9, m=9, showplot=TRUE, xlab1="z", main1=expression(paste("Fig 2. Posterior ", theta[e], " based on ", s==2)))
 ```
 
 
